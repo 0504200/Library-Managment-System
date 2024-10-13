@@ -1,0 +1,126 @@
+#include <iostream>
+#include <string>
+using namespace std;
+struct Book {
+int ISBN;
+string title;
+string author;
+bool is_borrowed;
+};
+const int MAX_BOOKS = 100;
+Book library[MAX_BOOKS];
+int book_count = 0;
+void addBook(int ISBN, string title, string author) {
+if (book_count < MAX_BOOKS) {
+library[book_count].ISBN = ISBN;
+library[book_count].title = title;
+library[book_count].author = author;
+library[book_count].is_borrowed = false;
+book_count++;
+cout << "Book added successfully!" << endl;
+} else {
+cout << "Library is full, cannot add more books." << endl;
+}
+}
+void displayBooks() {
+if (book_count == 0) {
+cout << "No books available in the library." << endl;
+} else {
+for (int i = 0; i < book_count; i++) {
+cout << "ISBN: " << library[i].ISBN
+<< ", Title: " << library[i].title
+<< ", Author: " << library[i].author
+<< ", Borrowed: " << (library[i].is_borrowed ? "Yes" : "No") << endl;
+}
+}
+}
+void searchBook(int ISBN) {
+for (int i = 0; i < book_count; i++) {
+if (library[i].ISBN == ISBN) {
+cout << "Found: " << library[i].title
+<< " by " << library[i].author
+<< ", Borrowed: " << (library[i].is_borrowed ? "Yes" : "No") << endl;
+return;
+}
+}
+cout << "Book not found." << endl;
+}
+void borrowBook(int ISBN) {
+for (int i = 0; i < book_count; i++) {
+if (library[i].ISBN == ISBN) {
+if (!library[i].is_borrowed) {
+library[i].is_borrowed = true;
+cout << "You borrowed: " << library[i].title << endl;
+} else {
+cout << "Sorry, the book is already borrowed." << endl;
+}
+return;
+}
+}
+cout << "Book not found." << endl;
+}
+void returnBook(int ISBN) {
+for (int i = 0; i < book_count; i++) {
+if (library[i].ISBN == ISBN) {
+if (library[i].is_borrowed) {
+library[i].is_borrowed = false;
+cout << "You returned: " << library[i].title << endl;
+} else {
+cout << "This book was not borrowed." << endl;
+}
+return;
+}
+}
+cout << "Book not found." << endl;
+}
+int main() {
+int choice, ISBN;
+string title, author;
+do {
+cout << "\nLibrary Management System\n";
+cout << "1. Add Book\n";
+cout << "2. Display All Books\n";
+cout << "3. Search Book\n";
+cout << "4. Borrow Book\n";
+cout << "5. Return Book\n";
+cout << "6. Exit\n";
+cout << "Enter your choice: ";
+cin >> choice;
+switch (choice) {
+case 1:
+cout << "Enter ISBN: ";
+cin >> ISBN;
+cin.ignore();
+cout << "Enter Title: ";
+getline(cin, title);
+cout << "Enter Author: ";
+getline(cin, author);
+addBook(ISBN, title, author);
+break;
+case 2:
+displayBooks();
+break;
+case 3:
+cout << "Enter ISBN to search: ";
+cin >> ISBN;
+searchBook(ISBN);
+break;
+case 4:
+cout << "Enter ISBN to borrow: ";
+cin >> ISBN;
+borrowBook(ISBN);
+break;
+case 5:
+cout << "Enter ISBN to return: ";
+cin >> ISBN;
+returnBook(ISBN);
+break;
+case 6:
+cout << "Exiting the system." << endl;
+break;
+default:
+cout << "Invalid choice! Please try again." << endl;
+}
+} while (choice != 6);
+return 0;
+}
